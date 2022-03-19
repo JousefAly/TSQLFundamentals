@@ -1,2 +1,2 @@
 # TSQLFundamentals
-## Here iam pracitcing TSQL Fundamentals and writing some quries
+ Here iam practicing TSQL Fundamentals and writing some quries
