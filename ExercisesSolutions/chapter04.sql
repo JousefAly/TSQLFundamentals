@@ -35,3 +35,51 @@ WHERE E.empid NOT IN
 	(SELECT empid
 	 FROM Sales.Orders
 	 WHERE orderdate >= '20160501')
+
+--Write a query that returns countries where there are customers but not employees:
+--Tables involved: Sales.Customers and HR.Employees
+
+SELECT DISTINCT  C.country
+FROM Sales.Customers AS C
+WHERE C.country NOT IN
+	(SELECT country FROM HR.Employees);
+
+--Write a query that returns for each customer all orders placed on the customer ’s last day of activity:
+--Table involved: Sales.Orders
+
+SELECT custid, orderid, orderdate, empid
+FROM Sales.Orders AS O1 
+WHERE orderdate = 
+	(SELECT MAX(orderdate)
+	 FROM Sales.Orders AS O2
+	 WHERE O2.custid = O1.custid);
+
+--Write a query that returns customers who placed orders in 2015 but not in 2016:
+--Tables involved: Sales.Customers and Sales.Orders
+
+SELECT custid, companyname
+FROM Sales.Customers
+WHERE custid IN
+		(SELECT custid
+		FROM Sales.Orders
+		WHERE YEAR(orderdate) = 2015 )
+	 AND custid NOT IN 
+		(SELECT custid
+		 FROM Sales.Orders
+		 WHERE YEAR(orderdate) = 2016 )
+
+--Write a query that returns customers who ordered product 12:
+--Tables involved: Sales.Customers, Sales.Orders, and Sales.OrderDetails
+--that is complex :)
+
+SELECT custid, companyname
+FROM Sales.Customers AS C
+WHERE EXISTS
+	(SELECT * 
+	 FROM Sales.Orders AS O
+	 WHERE O.custid = C.custid
+		AND EXISTS
+			(SELECT * 
+			 FROM Sales.OrderDetails AS OD
+			 WHERE OD.productid = O.orderid
+				AND OD.productid = 12 ));
